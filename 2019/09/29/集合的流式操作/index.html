@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>集合的流式操作 | zgq's blog</title><meta name="description" content="集合的流式操作"><meta name="author" content="zgq"><meta name="copyright" content="zgq"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="集合的流式操作"><meta name="twitter:description" content="集合的流式操作"><meta name="twitter:image" content="http://yoursite.com/img/post.jpg"><meta property="og:type" content="article"><meta property="og:title" content="集合的流式操作"><meta property="og:url" content="http://yoursite.com/2019/09/29/%E9%9B%86%E5%90%88%E7%9A%84%E6%B5%81%E5%BC%8F%E6%93%8D%E4%BD%9C/"><meta property="og:site_name" content="zgq's blog"><meta property="og:description" content="集合的流式操作"><meta property="og:image" content="http://yoursite.com/img/post.jpg"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://yoursite.com/2019/09/29/%E9%9B%86%E5%90%88%E7%9A%84%E6%B5%81%E5%BC%8F%E6%93%8D%E4%BD%9C/"><link rel="prev" title="springboot中的异步请求、异步调用、定时任务" href="http://yoursite.com/2019/10/28/%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82%E5%92%8C%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8/"><link rel="next" title="spring aop" href="http://yoursite.com/2019/08/24/spring-aop/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">23</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">11</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、从集合从获取流"><span class="toc-number">1.</span> <span class="toc-text">1、从集合从获取流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、流式API的分类"><span class="toc-number">2.</span> <span class="toc-text">2、流式API的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#处理操作（中间操作）"><span class="toc-number">2.1.</span> <span class="toc-text">处理操作（中间操作）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#聚合操作（终端操作）"><span class="toc-number">2.2.</span> <span class="toc-text">聚合操作（终端操作）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、api详解"><span class="toc-number">3.</span> <span class="toc-text">3、api详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#过滤"><span class="toc-number">3.1.</span> <span class="toc-text">过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#filter-Predicate"><span class="toc-number">3.1.1.</span> <span class="toc-text">filter(Predicate):</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#distinct"><span class="toc-number">3.1.2.</span> <span class="toc-text">distinct:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#limit-n"><span class="toc-number">3.1.3.</span> <span class="toc-text">limit(n):</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#skip-n"><span class="toc-number">3.1.4.</span> <span class="toc-text">skip(n)</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#排序"><span class="toc-number">3.2.</span> <span class="toc-text">排序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mapping"><span class="toc-number">3.3.</span> <span class="toc-text">mapping</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#peek"><span class="toc-number">3.4.</span> <span class="toc-text">peek</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#上面的api都是中间操作api，下面的api都是结束操作api。调用这些api就会把流关闭，取到最终的结果。"><span class="toc-number">3.5.</span> <span class="toc-text">上面的api都是中间操作api，下面的api都是结束操作api。调用这些api就会把流关闭，取到最终的结果。</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#anyMatch，allMatch，noneMatch"><span class="toc-number">3.5.1.</span> <span class="toc-text">anyMatch，allMatch，noneMatch</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#findFirst，findAny"><span class="toc-number">3.5.2.</span> <span class="toc-text">findFirst，findAny</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#reduce-collect-max-count"><span class="toc-number">3.5.3.</span> <span class="toc-text">reduce, collect, max, count</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#reduce"><span class="toc-number">3.5.3.1.</span> <span class="toc-text">reduce</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#max"><span class="toc-number">3.5.3.2.</span> <span class="toc-text">max</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#count"><span class="toc-number">3.5.3.3.</span> <span class="toc-text">count</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#collection"><span class="toc-number">3.5.3.4.</span> <span class="toc-text">collection</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#将元素分组操作"><span class="toc-number">3.5.3.5.</span> <span class="toc-text">将元素分组操作</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#将元素分区"><span class="toc-number">3.5.3.6.</span> <span class="toc-text">将元素分区</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#将元素拼接"><span class="toc-number">3.5.3.7.</span> <span class="toc-text">将元素拼接</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Optional对象"><span class="toc-number">3.6.</span> <span class="toc-text">Optional对象</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#使用"><span class="toc-number">3.6.1.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#检查："><span class="toc-number">3.6.2.</span> <span class="toc-text">检查：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#返回默认值："><span class="toc-number">3.6.3.</span> <span class="toc-text">返回默认值：</span></a></li></ol></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(/img/post.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">zgq's blog</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">集合的流式操作</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2019-09-29 08:23:45"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-09-29</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2019-10-16 22:07:16"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2019-10-16</span></time></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div id="article-container"><p>java8提供的流式api</p>
+<p>一般常用于操作集合的数据，例如可以对集合数据过滤，排序等操作。相比于循环，流式api可以更加优雅的操作集合数据。</p>
+<a id="more"></a>
+
+<h3 id="1、从集合从获取流"><a href="#1、从集合从获取流" class="headerlink" title="1、从集合从获取流"></a>1、从集合从获取流</h3><p>从集合中获取流对象stream()方法获取，</p>
+<p>该方法是Collection接口中定义的方法，所以实现了Collection接口的集合类都可以使用流式api。说明一下，这里说的都是串行流。</p>
+<h3 id="2、流式API的分类"><a href="#2、流式API的分类" class="headerlink" title="2、流式API的分类"></a>2、流式API的分类</h3><p>api可以总体分为2种，一种是处理操作（也叫中间操作）的api，一种是聚合操作（终端操作）的api。</p>
+<h4 id="处理操作（中间操作）"><a href="#处理操作（中间操作）" class="headerlink" title="处理操作（中间操作）"></a>处理操作（中间操作）</h4><p>指的是对流中数据进行处理，返回一个流，用于下一次操作。如filter，map，sorted等。并且这些用于处理操作的api根据处理元素时是否受上一次操作的影响，又分为有状态的和无状态的。例如filter就是无状态的，过滤流中的当前元素不受上一个元素的影响。而sorted就是有状态的，排流中某个元素的位置是要根据其他元素来确定的。需要注意的一点是，如果对流的操作只使用了处理操作的api，这些操作是不会进行的，只有调用了下面的终端操作的api，中间操作的api才会进行。</p>
+<h4 id="聚合操作（终端操作）"><a href="#聚合操作（终端操作）" class="headerlink" title="聚合操作（终端操作）"></a>聚合操作（终端操作）</h4><p>指的是该类型的api会生成一个结果给调用方，foreach比较特殊，只处理不返回结果。</p>
+<p>根据是否要处理全部元素再返回结果又可以把这类操作的api细分为短路操作和非短路操作。短路操作的api不需要处理完所有元素，满足条件就会返回结果，非短路操作的api会处理所有元素再返回结果。</p>
+<p>下面是api分类详情</p>
+<table>
+<thead>
+<tr>
+<th>中间操作api</th>
+<th>无状态</th>
+<th>unordered，filter，map， mapToInt， mapToLong，<br />mapToDouble， flatMap，flatMapToInt， flatMapToLong， <br />flatMapToDouble，peek</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td><strong>有状态</strong></td>
+<td><strong>distinct， sorted， limit， skip</strong></td>
+</tr>
+<tr>
+<td><strong>结束操作api</strong></td>
+<td><strong>非短路操作</strong></td>
+<td><strong>forEach， forEachOrdered，toArray， reduce， collect， max，min，count</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>短路操作</strong></td>
+<td><strong>anyMatch， allMatch， noneMatch， findFirst， findAny</strong></td>
+</tr>
+</tbody></table>
+<h3 id="3、api详解"><a href="#3、api详解" class="headerlink" title="3、api详解"></a>3、api详解</h3><h4 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h4><p> filter，distinct,limit，skip这几个api属于同一类型的api，都是对流进行过滤，然后返回过滤出来的流。</p>
+<h5 id="filter-Predicate"><a href="#filter-Predicate" class="headerlink" title="filter(Predicate):"></a>filter(Predicate):</h5><p>接收一个Predicate作为参数，按传入的Predicate过滤，返回过滤出的流</p>
+<h5 id="distinct"><a href="#distinct" class="headerlink" title="distinct:"></a>distinct:</h5><p>无参数，将流中元素去重</p>
+<h5 id="limit-n"><a href="#limit-n" class="headerlink" title="limit(n):"></a>limit(n):</h5><p>限制流返回元素的个数</p>
+<h5 id="skip-n"><a href="#skip-n" class="headerlink" title="skip(n)"></a>skip(n)</h5><p>截取流中第n个元素之后的元素</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">              .filter(i -&gt; i &gt; 2)</span><br><span class="line">              .distinct()</span><br><span class="line">              .limit(5)</span><br><span class="line">              .skip(3)</span><br><span class="line">              .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+
+<h4 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h4><p>排序用sorted方法，sorted方法有两个重载，不带参数的使用字典序排序，带参数为自定义排序方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .sorted()</span><br><span class="line">                .forEach(System.out::println);</span><br><span class="line">&#x2F;&#x2F; 倒序排序</span><br><span class="line">Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .sorted((i ,j) -&gt; j - i)</span><br><span class="line">                .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+
+<h4 id="mapping"><a href="#mapping" class="headerlink" title="mapping"></a>mapping</h4><p>map ,flatMap 将流中元素映射到其他类型上。另外，map 和flatMap都提供了映射到Double,Long,Int的快捷方法。map，flatMap都是接收一个Function类型的参数，map会将每个元素按照传入的传入的function类型做出来，但是当元素的集合时，map无法处理，需要用flatMap,flatMap会将集合元素打平，放到流中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">               .map(e -&gt; String.valueOf(e))</span><br><span class="line">               .forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(Arrays.asList(1, 4, 5, 6), Arrays.asList(9, 10, 23))</span><br><span class="line">                .flatMap(element -&gt; element.stream().distinct()</span><br><span class="line">                ).forEach(System.out::println);</span><br></pre></td></tr></table></figure>
+
+<p>使用flatMap之后，流中元素变成了1,4,5,6,9,10,23 ，而不是2个集合</p>
+<p>所以，map可以用来映射流中元素不是集合的情况，flatMap用来处理流中元素是集合的情况</p>
+<h4 id="peek"><a href="#peek" class="headerlink" title="peek"></a>peek</h4><p>改方法主要用于调试，和foreach类似，不同的在于foreach是结束操作的api，会把流关闭，而peek不会关闭流，还是返回一个流对象。</p>
+<h4 id="上面的api都是中间操作api，下面的api都是结束操作api。调用这些api就会把流关闭，取到最终的结果。"><a href="#上面的api都是中间操作api，下面的api都是结束操作api。调用这些api就会把流关闭，取到最终的结果。" class="headerlink" title="上面的api都是中间操作api，下面的api都是结束操作api。调用这些api就会把流关闭，取到最终的结果。"></a>上面的api都是中间操作api，下面的api都是结束操作api。调用这些api就会把流关闭，取到最终的结果。</h4><h5 id="anyMatch，allMatch，noneMatch"><a href="#anyMatch，allMatch，noneMatch" class="headerlink" title="anyMatch，allMatch，noneMatch"></a>anyMatch，allMatch，noneMatch</h5><p>根据传入的Predicate对象匹配，流中元素的api是否任意一个，全部，没有一个 满足传入的Predicate对象；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .anyMatch(e -&gt; e &gt; 4));  &#x2F;&#x2F; true</span><br><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .allMatch(e -&gt; e &gt; 4)); &#x2F;&#x2F; false</span><br><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .noneMatch(e -&gt; e &gt; 4)); &#x2F;&#x2F; false</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="findFirst，findAny"><a href="#findFirst，findAny" class="headerlink" title="findFirst，findAny"></a>findFirst，findAny</h5><p>查找流中的第一个，任意一个元素，findAny每次返回的元素是不定的。</p>
+<h5 id="reduce-collect-max-count"><a href="#reduce-collect-max-count" class="headerlink" title="reduce, collect, max, count"></a>reduce, collect, max, count</h5><p>这一系列操作都是重复进行某一个操作，输出单一的结果。例如，重复相加的操作，将所有元素相加。</p>
+<h6 id="reduce"><a href="#reduce" class="headerlink" title="reduce"></a>reduce</h6><p>reduce方法有3个重载</p>
+<ul>
+<li><p><code>Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator)</code></p>
+</li>
+<li><p><code>T reduce(T identity, BinaryOperator&lt;T&gt; accumulator)</code></p>
+</li>
+<li><p><code>&lt;U&gt; U reduce(U identity, BiFunction&lt;U,? super T,U&gt; accumulator, BinaryOperator&lt;U&gt; combiner)</code></p>
+</li>
+</ul>
+<p>都要传入一个二元操作符BinaryOperator，BinaryOperator类型的对象需要重写apply方法，实现具体的二元操作逻辑</p>
+<p><code>Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator)</code></p>
+<p>求和操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .reduce((v1, v2) -&gt; v1 + v2).ifPresent(System.out::println);</span><br></pre></td></tr></table></figure>
+
+<p>这里的v1代表前一次操作的结果，v2代表当前元素。</p>
+<p><code>T reduce(T identity, BinaryOperator&lt;T&gt; accumulator)</code></p>
+<p>identity指的是在操作前给定的默认值，会将改值按照给定的二元操作与元素中第一个进行操作，然后在依次进行后面的操作</p>
+<p><code>&lt;U&gt; U reduce(U identity, BiFunction&lt;U,? super T,U&gt; accumulator, BinaryOperator&lt;U&gt; combiner)</code></p>
+<p>identity还是默认值，accumulator，combiner有点区别了。串行流中工作的是accumulator，并行流中工作的是combiner</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .parallel() &#x2F;&#x2F; 串行流中将数据求和，并行流中将数据求积</span><br><span class="line">                .reduce(0, (v1, v2) -&gt; v1 + v2, (v1, v2) -&gt; v1 * v2));</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="max"><a href="#max" class="headerlink" title="max"></a>max</h6><p>取最大值操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .max(Comparator.comparingInt(v -&gt; v)).ifPresent(System.out::println);</span><br></pre></td></tr></table></figure>
+
+<h6 id="count"><a href="#count" class="headerlink" title="count"></a>count</h6><p>取流中元素数量</p>
+<h6 id="collection"><a href="#collection" class="headerlink" title="collection"></a>collection</h6><p>collection有2个重载方法</p>
+<p><R> R collect(Supplier<R> supplier,BiConsumer&lt;R, ? super T&gt; accumulator, BiConsumer&lt;R, R&gt; combiner);</p>
+<p>&lt;R, A&gt; R collect(Collector&lt;? super T, A, R&gt; collector)</p>
+<p>第二个是比较常用的方法，传入一个Collector对象。基本上内置的Collectors的静态方法就够用了</p>
+<p>&lt;R, A&gt; R collect(Collector&lt;? super T, A, R&gt; collector)</p>
+<p>例如返回list，set,map结构等</p>
+<p>转为list结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">               .collect(Collectors.toList()));</span><br></pre></td></tr></table></figure>
+
+<p>转为set结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .collect(Collectors.toSet()));</span><br></pre></td></tr></table></figure>
+
+<p>转为map，如果出现key重复，不做处理会报错，提供一个处理key重复的二元操作方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .collect(Collectors.toMap(Integer::valueOf,String::valueOf)));</span><br><span class="line">                </span><br><span class="line">s为前一个值，s2为后一个值</span><br><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .collect(Collectors.toMap(Integer::valueOf, String::valueOf, new BinaryOperator&lt;String&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public String apply(String s, String s2) &#123;</span><br><span class="line">                        return s + s2;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)));</span><br></pre></td></tr></table></figure>
+
+<h6 id="将元素分组操作"><a href="#将元素分组操作" class="headerlink" title="将元素分组操作"></a>将元素分组操作</h6><p>groupBy有三个重写方法</p>
+<ul>
+<li><code>static &lt;T,K&gt; Collector&lt;T,?,Map&lt;K,List&lt;T&gt;&gt;&gt; groupingBy(Function&lt;? super T,? extends K&gt; classifier)</code></li>
+<li><code>static &lt;T,K,A,D&gt; Collector&lt;T,?,Map&lt;K,D&gt;&gt; groupingBy(Function&lt;? super T,? extends K&gt; classifier, Collector&lt;? super T,A,D&gt; downstream)</code></li>
+<li><code>static &lt;T,K,D,A,M extends Map&lt;K,D&gt;&gt; Collector&lt;T,?,M&gt; groupingBy(Function&lt;? super T,? extends K&gt; classifier, Supplier&lt;M&gt; mapFactory, Collector&lt;? super T,A,D&gt; downstream)</code></li>
+</ul>
+<p>static &lt;T,K&gt; Collector&lt;T,?,Map&lt;K,List<T>&gt;&gt; groupingBy(Function&lt;? super T,? extends K&gt; classifier)`</p>
+<p>根据元素中的某一个属性分类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(Stream.of(1, 2, 3, 2, 4, 3, 7, 9, 5, 6)</span><br><span class="line">                .collect(Collectors.groupingBy(Integer::intValue)));</span><br><span class="line">&#x2F;&#x2F;&#123;1&#x3D;[1], 2&#x3D;[2, 2], 3&#x3D;[3, 3], 4&#x3D;[4], 5&#x3D;[5], 6&#x3D;[6], 7&#x3D;[7], 9&#x3D;[9]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>static &lt;T,K,A,D&gt; Collector&lt;T,?,Map&lt;K,D&gt;&gt; groupingBy(Function&lt;? super T,? extends K&gt; classifier, Collector&lt;? super T,A,D&gt; downstream)</p>
+<p>多一个downstream参数，该参数用来映射分完组的元素，也是一个Collector</p>
+<p>如下，按照age分组，分完组的数据只取name值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(userList.stream()</span><br><span class="line">               .collect(Collectors.groupingBy(User::getAge, Collectors.mapping(User::getName, Collectors.toList()))));</span><br></pre></td></tr></table></figure>
+
+<p>static &lt;T,K,D,A,M extends Map&lt;K,D&gt;&gt; Collector&lt;T,?,M&gt; groupingBy(Function&lt;? super T,? extends K&gt; classifier, Supplier<M> mapFactory, Collector&lt;? super T,A,D&gt; downstream)</p>
+<h6 id="将元素分区"><a href="#将元素分区" class="headerlink" title="将元素分区"></a>将元素分区</h6><p>partitioningBy</p>
+<p>方法重写和groupBy的类似，但只有两个</p>
+<ul>
+<li><code>static &lt;T&gt; Collector&lt;T,?,Map&lt;Boolean,List&lt;T&gt;&gt;&gt; partitioningBy(Predicate&lt;? super T&gt; predicate)</code></li>
+<li><code>static &lt;T,D,A&gt; Collector&lt;T,?,Map&lt;Boolean,D&gt;&gt; partitioningBy(Predicate&lt;? super T&gt; predicate, Collector&lt;? super T,A,D&gt; downstream)</code></li>
+</ul>
+<p>static <T> Collector&lt;T,?,Map&lt;Boolean,List<T>&gt;&gt; partitioningBy(Predicate&lt;? super T&gt; predicate)</p>
+<p>根据一个Predicate对象将流中元素分为2份，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(userList.stream()</span><br><span class="line">                .collect(Collectors.partitioningBy( s -&gt; s.getAge() &gt; 23)));</span><br></pre></td></tr></table></figure>
+
+<p>返回结果为一个map，key分别为true和false，value为满足条件的元素list</p>
+<p>static &lt;T,D,A&gt; Collector&lt;T,?,Map&lt;Boolean,D&gt;&gt; partitioningBy(Predicate&lt;? super T&gt; predicate, Collector&lt;? super T,A,D&gt; downstream)</p>
+<p>多一个处理映射结果的Collector参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   System.out.println(userList.stream()</span><br><span class="line">           .collect(Collectors.partitioningBy( s -&gt; s.getAge() &gt; 18, Collectors.mapping(User::getName, Collectors.toList()))));</span><br><span class="line">  </span><br><span class="line">&#x2F;&#x2F;&#123;false&#x3D;[user_01, user_11, user_31, user_41, user_51, user_71, user_91], true&#x3D;[user_21, user_61, user_81]&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="将元素拼接"><a href="#将元素拼接" class="headerlink" title="将元素拼接"></a>将元素拼接</h6><p>join</p>
+<ul>
+<li><code>static Collector&lt;CharSequence,?,String&gt; joining()</code></li>
+<li><code>static Collector&lt;CharSequence,?,String&gt; joining(CharSequence delimiter)</code></li>
+<li><code>static Collector&lt;CharSequence,?,String&gt; joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix)</code></li>
+</ul>
+<p>不带任何参数的，把元素都拼接起来，</p>
+<p>delimiter：指定一个分割符</p>
+<p>prefix：前缀，拼在最前面</p>
+<p>suffix：后缀，拼在最后面</p>
+<h4 id="Optional对象"><a href="#Optional对象" class="headerlink" title="Optional对象"></a>Optional对象</h4><p>可以注意到，有些流的api返回值是一个Optiona类型的对象。Java8中引入Optional对象主要解决的问题是空指针异常。Optional是一个包装类，其中可以包含或者不包含非空对象。其提供了三个静态方法来构造Optional对象</p>
+<ul>
+<li><code>static &lt;T&gt; Optional&lt;T&gt; empty()</code></li>
+<li><code>static &lt;T&gt; Optional&lt;T&gt; of(T value)</code></li>
+<li><code>static &lt;T&gt; Optional&lt;T&gt; ofNullable(T value)</code></li>
+</ul>
+<p>empty(): </p>
+<p>返回一个空的Optional对象，里面没有对象</p>
+<p>of(T value)</p>
+<p>使用value创建包含值的optional，如果value为空，会报空指针</p>
+<p>ofNullable(T value)</p>
+<p>上面两个方法的结合体，value不为空就创建包含value的optional，为空则调用empty，创建空的optional</p>
+<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><p>取值：</p>
+<p>get()方法。空的optional调用get()会抛异常</p>
+<h5 id="检查："><a href="#检查：" class="headerlink" title="检查："></a>检查：</h5><p>isPresent() 检查Optional中是否有值，返回true或false</p>
+<h5 id="返回默认值："><a href="#返回默认值：" class="headerlink" title="返回默认值："></a>返回默认值：</h5><p>orElse(value)</p>
+<p>optional中有值则返回值，无值则返回OrElse中给的值</p>
+<p><em>orElseGet(Supplier)</em> </p>
+<p>Optional中有值则返回值，无值则调用Supplier函数接口，返回执行结果</p>
+<p>当Optional中值为空时，两个方法并无差异，但是当Optional中值不为空时，orElse(value)还是会执行，而</p>
+<p>orElseGet(Supplier)方法则不会执行</p>
+<p>Optional类中也有一些链式操作的方法，比如map，flatMap，filter等，可以流操作的api结合使用，非常丝滑。</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">zgq</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yoursite.com/2019/09/29/%E9%9B%86%E5%90%88%E7%9A%84%E6%B5%81%E5%BC%8F%E6%93%8D%E4%BD%9C/">http://yoursite.com/2019/09/29/%E9%9B%86%E5%90%88%E7%9A%84%E6%B5%81%E5%BC%8F%E6%93%8D%E4%BD%9C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yoursite.com" target="_blank">zgq's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/post.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2019/10/28/%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82%E5%92%8C%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8/"><img class="prev_cover lazyload" data-src="/img/post.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">springboot中的异步请求、异步调用、定时任务</div></div></a></div><div class="next-post pull_right"><a href="/2019/08/24/spring-aop/"><img class="next_cover lazyload" data-src="/img/post.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">spring aop</div></div></a></div></nav></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 By zgq</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>

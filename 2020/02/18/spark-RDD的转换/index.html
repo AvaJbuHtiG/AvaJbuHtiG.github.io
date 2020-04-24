@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>spark RDD的转换 | zgq's blog</title><meta name="description" content="spark RDD的转换"><meta name="keywords" content="大数据 spark"><meta name="author" content="zgq"><meta name="copyright" content="zgq"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="spark RDD的转换"><meta name="twitter:description" content="spark RDD的转换"><meta name="twitter:image" content="http://yoursite.com/img/post.jpg"><meta property="og:type" content="article"><meta property="og:title" content="spark RDD的转换"><meta property="og:url" content="http://yoursite.com/2020/02/18/spark-RDD%E7%9A%84%E8%BD%AC%E6%8D%A2/"><meta property="og:site_name" content="zgq's blog"><meta property="og:description" content="spark RDD的转换"><meta property="og:image" content="http://yoursite.com/img/post.jpg"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://yoursite.com/2020/02/18/spark-RDD%E7%9A%84%E8%BD%AC%E6%8D%A2/"><link rel="prev" title="spark RDD" href="http://yoursite.com/2020/02/19/spark-RDD/"><link rel="next" title="flume" href="http://yoursite.com/2020/02/04/flume/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">23</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">11</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#value类型的RDD"><span class="toc-number">1.</span> <span class="toc-text">value类型的RDD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#map"><span class="toc-number">2.</span> <span class="toc-text">map</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mapValues"><span class="toc-number">2.1.</span> <span class="toc-text">mapValues</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mapPartitions"><span class="toc-number">2.2.</span> <span class="toc-text">mapPartitions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mapPartitionsWithIndex"><span class="toc-number">2.3.</span> <span class="toc-text">mapPartitionsWithIndex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#glom"><span class="toc-number">2.4.</span> <span class="toc-text">glom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#simple"><span class="toc-number">2.5.</span> <span class="toc-text">simple</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reduceByKey"><span class="toc-number">3.</span> <span class="toc-text">reduceByKey</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#distinct"><span class="toc-number">4.</span> <span class="toc-text">distinct</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#coalesce-numPartitions-shuffle"><span class="toc-number">4.1.</span> <span class="toc-text">coalesce(numPartitions,shuffle?)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#repartition-numPartitions"><span class="toc-number">4.2.</span> <span class="toc-text">repartition(numPartitions)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pipe"><span class="toc-number">4.3.</span> <span class="toc-text">pipe</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#双value类型RDD"><span class="toc-number">5.</span> <span class="toc-text">双value类型RDD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#union"><span class="toc-number">5.1.</span> <span class="toc-text">union</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#subtract"><span class="toc-number">5.2.</span> <span class="toc-text">subtract</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#intersection"><span class="toc-number">5.3.</span> <span class="toc-text">intersection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cartesian"><span class="toc-number">5.4.</span> <span class="toc-text">cartesian</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zip"><span class="toc-number">5.5.</span> <span class="toc-text">zip</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Key-value类型RDD"><span class="toc-number">6.</span> <span class="toc-text">Key-value类型RDD</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#partitionBy"><span class="toc-number">6.1.</span> <span class="toc-text">partitionBy</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(/img/post.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">zgq's blog</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">spark RDD的转换</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2020-02-18 16:12:31"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2020-02-18</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-04-22 20:43:29"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2020-04-22</span></time></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div id="article-container"><a id="more"></a>
+
+<p>RDD整体上分为value类型和key-value类型</p>
+<h2 id="value类型的RDD"><a href="#value类型的RDD" class="headerlink" title="value类型的RDD"></a>value类型的RDD</h2><h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>针对的是RDD中每一条数据，每条数据都会调用map函数。例如，某个Rdd中有2个分区，分区1中有数据2，4，分区2中有5，6，那么这个RDD调用map方法，会对这4条数据都调用一次map函数</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> log_data = sc.textFile(<span class="string">"hdfs://114.67.106.11:9000/log_my_2020-03-19.log"</span>)</span><br><span class="line"></span><br><span class="line">log_data.map(r =&gt; &#123;</span><br><span class="line">  <span class="keyword">val</span> lines = r.split(<span class="string">"\t"</span>)</span><br><span class="line">  </span><br><span class="line">  (r(<span class="number">0</span>), r)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="mapValues"><a href="#mapValues" class="headerlink" title="mapValues"></a>mapValues</h3><p>和map类似,map是将单值的元素变为k v形式的值,mapValues是将k,v形式变为 k,(k,v)形式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">val result &#x3D; log_data.map(r &#x3D;&gt; &#123;</span><br><span class="line">  val lines &#x3D; r.split(&quot;\t&quot;)</span><br><span class="line">  (lines(0), r)</span><br><span class="line">&#125;).mapValues(r &#x3D;&gt; &#123;</span><br><span class="line">  val lines &#x3D; r.split(&quot;\t&quot;)</span><br><span class="line">  (lines(0), lines(4))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(100.167.124.156,(100.167.124.156,302))</span><br><span class="line">(12.100.30.167,(12.100.30.167,302))</span><br><span class="line">(29.167.124.12,(29.167.124.12,404))</span><br><span class="line">(143.167.29.12,(143.167.29.12,200))</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="mapPartitions"><a href="#mapPartitions" class="headerlink" title="mapPartitions"></a>mapPartitions</h3><p>针对的是RDD中的分区，还是上例中的RDD，调用mapPartitions，只会对RDD中2个分区分别调用一次mapPartitions函数。例：如果要用mapPartitions对RDD数据都*2，应该这么写</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rdd.mapPartitions(datas &#x3D;&gt; &#123;</span><br><span class="line">      datas.map(r &#x3D;&gt; r*2)</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>datas表示RDD中一个分区的数据。map算子无法保证RDD中分区的数据的顺序，因为他是针对RDD中的每一条数据，mapPartitions算子可以保证某一个分区内数据的顺序，因为他是按分区来处理的。由于mapPartitions针对的是分区处理，如果数据量大，可能会OOM。</p>
+<h3 id="mapPartitionsWithIndex"><a href="#mapPartitionsWithIndex" class="headerlink" title="mapPartitionsWithIndex"></a>mapPartitionsWithIndex</h3><p>在mapPartitions函数基础上，增加了一个分区的编号参数，其他不变，使用方法如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rdd.mapPartitionsWithIndex((index, datas) &#x3D;&gt; &#123;</span><br><span class="line">     if (index % 2 &#x3D;&#x3D; 0) &#123;</span><br><span class="line">       datas.map(r &#x3D;&gt; r * 2)</span><br><span class="line">     &#125; else &#123;</span><br><span class="line">       datas.map(r &#x3D;&gt; r )</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;).collect().foreach(println)</span><br></pre></td></tr></table></figure>
+
+<h3 id="glom"><a href="#glom" class="headerlink" title="glom"></a>glom</h3><p>将每一个分区内数据形成一个数组，形成新的RDD类型时RDD[Array[T]]，示例如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdd.glom().collect().foreach(r &#x3D;&gt; println(r.mkString(&quot;,&quot;)))</span><br></pre></td></tr></table></figure>
+
+<p>rdd是一个有3个分区的RDD</p>
+<h3 id="simple"><a href="#simple" class="headerlink" title="simple"></a>simple</h3><p>simple(withReplacement,fraction,seed)</p>
+<p>以指定的随机种子随机抽样出数量为fraction的数据，withReplacement表示是抽出的数据是否放回，true为有放回的抽样，false为无放回的抽样，seed用于指定随机数生成器种子。</p>
+<p>fraction是一个小数，表示拿出数据的百分比，使用示例如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rdd.sample(withReplacement &#x3D; false, 0.5).collect()</span><br><span class="line">      .foreach(println)</span><br></pre></td></tr></table></figure>
+
+<h2 id="reduceByKey"><a href="#reduceByKey" class="headerlink" title="reduceByKey"></a>reduceByKey</h2><p>把key的元素按照给定的函数来计算</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">val result &#x3D; sc.makeRDD(List(&quot;spark&quot;, &quot;scala&quot;, &quot;hadoop&quot;, &quot;scala&quot;, &quot;hive&quot;))</span><br><span class="line">  .map(r &#x3D;&gt; &#123;</span><br><span class="line">    if (r.length % 2 &#x3D;&#x3D; 0) &#123;</span><br><span class="line">      (r, 1)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      (r, 2)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).mapValues(r &#x3D;&gt; (r, 1))</span><br><span class="line">  .reduceByKey((a, b) &#x3D;&gt; (a._1 + b._1, a._2 + b._2))</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="distinct"><a href="#distinct" class="headerlink" title="distinct"></a>distinct</h2><p>distinct对RDD数据去重时，会打乱RDD的分区内数据，这个过程叫shuffle(将一个分区的数据打乱重组到其他不同的分区操作)。 distinct之后，数据可能会减少，可以传入去重后，RDD内数据的分区数</p>
+<h3 id="coalesce-numPartitions-shuffle"><a href="#coalesce-numPartitions-shuffle" class="headerlink" title="coalesce(numPartitions,shuffle?)"></a>coalesce(numPartitions,shuffle?)</h3><p>缩减RDD内数据的分区数，参数为缩减后的分区数。可以简单理解为合并分区，这中间是没有shuffle过程的，当然也可以设置shuffle为true，让减少分区过程中进行shuffle。</p>
+<h3 id="repartition-numPartitions"><a href="#repartition-numPartitions" class="headerlink" title="repartition(numPartitions)"></a>repartition(numPartitions)</h3><p>根据分区数，重新通过网络随机洗牌所有数据。 repartition实际上是调用的coalesce，默认是进行shuffle的</p>
+<h3 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h3><p>管道，针对每个分区，都执行一个shell脚本，返回输出的RDD。脚本需要放在Worker节点可以访问到的位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdd.pipe(&quot;&#x2F;opt&#x2F;module&#x2F;spark&#x2F;pipe.sh&quot;).collect()</span><br></pre></td></tr></table></figure>
+
+<h2 id="双value类型RDD"><a href="#双value类型RDD" class="headerlink" title="双value类型RDD"></a>双value类型RDD</h2><h3 id="union"><a href="#union" class="headerlink" title="union"></a>union</h3><p>两个RDD求并集</p>
+<h3 id="subtract"><a href="#subtract" class="headerlink" title="subtract"></a>subtract</h3><p>两个RDD求差集</p>
+<h3 id="intersection"><a href="#intersection" class="headerlink" title="intersection"></a>intersection</h3><p>两个RDD求交集</p>
+<h3 id="cartesian"><a href="#cartesian" class="headerlink" title="cartesian"></a>cartesian</h3><p>两个RDD求笛卡尔积</p>
+<h3 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h3><p>将两个RDD组合成Key/Value形式的RDD,这里默认两个RDD的partition数量以及元素数量都相同，否则会抛出异常</p>
+<h2 id="Key-value类型RDD"><a href="#Key-value类型RDD" class="headerlink" title="Key-value类型RDD"></a>Key-value类型RDD</h2><h3 id="partitionBy"><a href="#partitionBy" class="headerlink" title="partitionBy"></a>partitionBy</h3><p>对pairRDD进行分区操作，如果原有的partionRDD和现有的partionRDD是一致的话就不进行分区， 否则会生成ShuffleRDD，即会产生shuffle过程</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">zgq</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yoursite.com/2020/02/18/spark-RDD%E7%9A%84%E8%BD%AC%E6%8D%A2/">http://yoursite.com/2020/02/18/spark-RDD%E7%9A%84%E8%BD%AC%E6%8D%A2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yoursite.com" target="_blank">zgq's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE-spark/">大数据 spark</a></div><div class="post_share"><div class="social-share" data-image="/img/post.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/02/19/spark-RDD/"><img class="prev_cover lazyload" data-src="/img/post.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">spark RDD</div></div></a></div><div class="next-post pull_right"><a href="/2020/02/04/flume/"><img class="next_cover lazyload" data-src="/img/post.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">flume</div></div></a></div></nav></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 By zgq</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>

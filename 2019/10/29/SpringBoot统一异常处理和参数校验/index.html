@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SpringBoot统一异常处理和参数校验 | zgq's blog</title><meta name="description" content="SpringBoot统一异常处理和参数校验"><meta name="author" content="zgq"><meta name="copyright" content="zgq"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="SpringBoot统一异常处理和参数校验"><meta name="twitter:description" content="SpringBoot统一异常处理和参数校验"><meta name="twitter:image" content="http://yoursite.com/img/post.jpg"><meta property="og:type" content="article"><meta property="og:title" content="SpringBoot统一异常处理和参数校验"><meta property="og:url" content="http://yoursite.com/2019/10/29/SpringBoot%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%92%8C%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C/"><meta property="og:site_name" content="zgq's blog"><meta property="og:description" content="SpringBoot统一异常处理和参数校验"><meta property="og:image" content="http://yoursite.com/img/post.jpg"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://yoursite.com/2019/10/29/SpringBoot%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%92%8C%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C/"><link rel="prev" title="Guava" href="http://yoursite.com/2019/11/04/Guava/"><link rel="next" title="springboot中的异步请求、异步调用、定时任务" href="http://yoursite.com/2019/10/28/%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82%E5%92%8C%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">23</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">11</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#统一异常处理"><span class="toc-number">1.</span> <span class="toc-text">统一异常处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hibernate-validator参数校验"><span class="toc-number">2.</span> <span class="toc-text">hibernate-validator参数校验</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#校验类型"><span class="toc-number">2.1.</span> <span class="toc-text">校验类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#校验模式"><span class="toc-number">2.2.</span> <span class="toc-text">校验模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#校验参数"><span class="toc-number">2.3.</span> <span class="toc-text">校验参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分组校验"><span class="toc-number">2.4.</span> <span class="toc-text">分组校验</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(/img/post.jpg)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">zgq's blog</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">SpringBoot统一异常处理和参数校验</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2019-10-29 15:48:35"><i class="fa fa-calendar" aria-hidden="true"></i> 发表于 2019-10-29</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2019-10-29 15:49:40"><i class="fa fa-history" aria-hidden="true"></i> 更新于 2019-10-29</span></time></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div id="article-container"><h3 id="统一异常处理"><a href="#统一异常处理" class="headerlink" title="统一异常处理"></a>统一异常处理</h3><a id="more"></a>
+
+<p>为了处理请求中的异常，定义一个统一的异常类。</p>
+<p>主要是用@ControllerAdvice注解，通过Advice这个词就可以猜到，是用aop来实现的。和aop中的通知类似</p>
+<p>该通知会作用于加了@RequestMapping（包括@GetMapping等）的方法上。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@ControllerAdvice</span><br><span class="line">public class MyExceptionHandler &#123;</span><br><span class="line"></span><br><span class="line">    @ExceptionHandler(value &#x3D; ArithmeticException.class)</span><br><span class="line">    @ResponseStatus(value &#x3D; HttpStatus.INTERNAL_SERVER_ERROR)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public Map&lt;String, Object&gt; internalServerErrorException(Exception e) &#123;</span><br><span class="line">        Map&lt;String, Object&gt; resp &#x3D; new HashMap&lt;&gt;();</span><br><span class="line">        resp.put(&quot;code&quot;, &quot;error&quot;);</span><br><span class="line">        resp.put(&quot;msg&quot;, e.getMessage());</span><br><span class="line">        return resp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>@ExceptionHandler注解可以指定该方法处理什么类型的异常，@ResponseStatus可以指定该异常处理的响应状态码，还可以和像接口一样，通过@ResponseBody返回json格式的数据。</p>
+<p>如果定义了多个异常处理的方法，指定的异常存在继承关系，优先会调用处理子类异常的方法。</p>
+<h3 id="hibernate-validator参数校验"><a href="#hibernate-validator参数校验" class="headerlink" title="hibernate-validator参数校验"></a>hibernate-validator参数校验</h3><h4 id="校验类型"><a href="#校验类型" class="headerlink" title="校验类型"></a>校验类型</h4><p>现在参数校验通常是采用hibernate-validator。hibernate-validator是JSR 303规范的实现</p>
+<p>其中JSR 303定义的校验类型有</p>
+<table>
+<thead>
+<tr>
+<th>@Null</th>
+<th>被注释的元素必须为 <code>null</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@NotNull</code></td>
+<td>被注释的元素必须不为 <code>null</code></td>
+</tr>
+<tr>
+<td><code>@AssertTrue</code></td>
+<td>被注释的元素必须为 <code>true</code></td>
+</tr>
+<tr>
+<td><code>@AssertFalse</code></td>
+<td>被注释的元素必须为 <code>false</code></td>
+</tr>
+<tr>
+<td><code>@Min(value)</code></td>
+<td>被注释的元素必须是一个数字，其值必须大于等于指定的最小值</td>
+</tr>
+<tr>
+<td><code>@Max(value)</code></td>
+<td>被注释的元素必须是一个数字，其值必须小于等于指定的最大值</td>
+</tr>
+<tr>
+<td><code>@DecimalMin(value)</code></td>
+<td>被注释的元素必须是一个数字，其值必须大于等于指定的最小值</td>
+</tr>
+<tr>
+<td><code>@DecimalMax(value)</code></td>
+<td>被注释的元素必须是一个数字，其值必须小于等于指定的最大值</td>
+</tr>
+<tr>
+<td><code>@Size(max, min)</code></td>
+<td>被注释的元素的大小必须在指定的范围内</td>
+</tr>
+<tr>
+<td><code>@Digits (integer, fraction)</code></td>
+<td>被注释的元素必须是一个数字，其值必须在可接受的范围内</td>
+</tr>
+<tr>
+<td><code>@Past</code></td>
+<td>被注释的元素必须是一个过去的日期</td>
+</tr>
+<tr>
+<td><code>@Future</code></td>
+<td>被注释的元素必须是一个将来的日期</td>
+</tr>
+<tr>
+<td><code>@Pattern(value)</code></td>
+<td>被注释的元素必须符合指定的正则表达式</td>
+</tr>
+</tbody></table>
+<p>hibernate-validator额外提供了下面几个校验类型</p>
+<table>
+<thead>
+<tr>
+<th><code>@Email</code></th>
+<th>被注释的元素必须是电子邮箱地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@Length</code></td>
+<td>被注释的字符串的大小必须在指定的范围内</td>
+</tr>
+<tr>
+<td><code>@NotEmpty</code></td>
+<td>被注释的字符串的必须非空</td>
+</tr>
+<tr>
+<td><code>@Range</code></td>
+<td>被注释的元素必须在合适的范围内</td>
+</tr>
+</tbody></table>
+<p>在dto要校验的数向上加上上面的注解，然后在接口请求参数前加@Valid注解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private Object valid(@RequestBody @Valid ValidRequestDto item) &#123;</span><br><span class="line">       return item;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<!--这些注解也可以用在get set方法上-->
+
+<p>@Notblank @NotNull @NotEmpty三个注解的区别</p>
+<p>@Notblank ：只能用在字符串上，要求字符串不能为 null 或者 “”</p>
+<p>@NotNull: 用在各种集合，数组类型上，要求不为null，但是可以size或length为0</p>
+<p>@NotEmpty：用在各种集合，数组类型上，要求不为null，并且size或length为0</p>
+<p>在Validator接口中，校验的方法有3个，validate会对所有属性进行约束校验，除了validate之外，还有下面这两个。</p>
+<p>validateValue,validateProperty</p>
+<p>validateValue是对某一个特定的属性校验，validateProperty是对某一个特定属性的值和特定的值校验</p>
+<p>先创建一个校验器实例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ValidatorFactory factory &#x3D; Validation.buildDefaultValidatorFactory();</span><br><span class="line">        Validator validator &#x3D; factory.getValidator();</span><br></pre></td></tr></table></figure>
+
+<p>在创建一个code为””的对象，用校验器实例来校验</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ValidRequestDto dto &#x3D; new ValidRequestDto(&quot;&quot;, &quot;xx&quot;, 3);</span><br><span class="line">       Set&lt;ConstraintViolation&lt;ValidRequestDto&gt;&gt; code &#x3D; validator.validateProperty(dto, &quot;code&quot;);</span><br><span class="line">       System.out.println(code);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ConstraintViolationImpl&#123;interpolatedMessage&#x3D;&#39;code不能为空&#39;, propertyPath&#x3D;code, rootBeanClass&#x3D;class com.springboot.study.validator.ValidRequestDto, messageTemplate&#x3D;&#39;code不能为空&#39;&#125;]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;ConstraintViolation&lt;ValidRequestDto&gt;&gt; level &#x3D; validator.validateValue(ValidRequestDto.class, &quot;level&quot;, 1);</span><br><span class="line">        System.out.println(level);</span><br></pre></td></tr></table></figure>
+
+<p>validateValue校验把1作为level属性的值是否合法。</p>
+<h4 id="校验模式"><a href="#校验模式" class="headerlink" title="校验模式"></a>校验模式</h4><p>hibernate-validator有2两种校验模式，普通模式和快速失败返回模式</p>
+<p>普通模式会校验完所有属性，然后返回失败信息，快速失败返回模式只要验证到一个失败，就不会再校验，返回失败</p>
+<p>配置方式如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Bean</span><br><span class="line">    public Validator initValidator() &#123;</span><br><span class="line">        ValidatorFactory validatorFactory &#x3D; Validation.byProvider(HibernateValidator.class)</span><br><span class="line">                .configure()</span><br><span class="line">                .failFast(true)</span><br><span class="line">                .buildValidatorFactory();</span><br><span class="line"></span><br><span class="line">        Validator validator &#x3D; validatorFactory.getValidator();</span><br><span class="line">        return validator;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="校验参数"><a href="#校验参数" class="headerlink" title="校验参数"></a>校验参数</h4><p>上面的在参数dto属性上加校验注解，然后在参数前加@Valid注解，这样只能校验post请求。get请求的参数校验用@valid注解没用，要用MethodValidationPostProcessor</p>
+<p>创建MethodValidationPostProcessor对应的bean</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Bean</span><br><span class="line">   public MethodValidationPostProcessor initMethodValidationPostProcessor() &#123;</span><br><span class="line">       MethodValidationPostProcessor postProcessor &#x3D; new MethodValidationPostProcessor();</span><br><span class="line">       postProcessor.setValidator(this.validator);;</span><br><span class="line">       return postProcessor;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;&#x2F;getValid&quot;)</span><br><span class="line">    public Object getValid(@Length(min &#x3D; 2, max &#x3D; 10)</span><br><span class="line">                               @RequestParam(value &#x3D; &quot;code&quot;) String code,</span><br><span class="line">                            @RequestParam(value &#x3D; &quot;name&quot;) String name,</span><br><span class="line">                            @Min (value &#x3D; 3, message &#x3D; &quot;level不能小于3&quot;)</span><br><span class="line">                               @RequestParam(value &#x3D; &quot;level&quot;) Integer level</span><br><span class="line">                            ) &#123;</span><br><span class="line">        return new ValidRequestDto(code, name, level);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后在对应的controller上加@Validated注解即可</p>
+<p>如果dto中属性有另外的dto对象，除了要加@NotNull之外，还要加上@valid注解，才会校验该内嵌的对象是否存在，如果不加@valid注解，只会校验内嵌对象的属性是否合法，该内嵌对象为null也会通过校验，就会导致其属性的校验不生效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ValidRequestDto &#123;</span><br><span class="line">    @NotBlank(message &#x3D; &quot;code不能为空&quot;)</span><br><span class="line">    private String code;</span><br><span class="line">    @NotEmpty(message &#x3D; &quot;name不能为空&quot;)</span><br><span class="line">    private String name;</span><br><span class="line">    @Min(value &#x3D; 3, message &#x3D; &quot;level只能为数字&quot;)</span><br><span class="line">    private Integer level;</span><br><span class="line"></span><br><span class="line">    @Valid</span><br><span class="line">    @NotNull</span><br><span class="line">    private InnerDto inner;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="分组校验"><a href="#分组校验" class="headerlink" title="分组校验"></a>分组校验</h4><p>先定义好需要标记的分组接口，没有任何内容，只是用来标记分组，需要多少分组九键几个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public interface GroupA &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">........</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后在dto属性的校验注解上加上该校验属于哪个分组，不标的就是默认分组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ValidRequestDto</span> </span>&#123;</span><br><span class="line">    <span class="meta">@NotBlank</span>(message = <span class="string">"code不能为空"</span>,groups = GroupA<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">    <span class="title">private</span> <span class="title">String</span> <span class="title">code</span></span>;</span><br><span class="line">    <span class="meta">@NotEmpty</span>(message = <span class="string">"name不能为空"</span>)</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="meta">@Min</span>(value = <span class="number">3</span>, message = <span class="string">"level只能为数字"</span>, groups = GroupB<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class">    <span class="title">private</span> <span class="title">Integer</span> <span class="title">level</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Valid</span></span><br><span class="line">    <span class="meta">@NotNull</span></span><br><span class="line">    <span class="keyword">private</span> InnerDto inner;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后，参数面前就不用@valid注解了，要用@validated注解,标明要校验哪个分组，不标就只会校验默认分组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"/postValid1"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">postValid1</span><span class="params">(@RequestBody @Validated(&#123;GroupA.class&#125;)</span> ValidRequestDto item) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> item;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>既然出现了多个分组，那么就会出现一个分组校验顺序的问题。</p>
+<p>经测试，校验顺序为在@Validated注解中标明的分组顺序，写在前面的分组先校验。</p>
+<p>如果出现很多个校验分组，书写就有点麻烦了，这里hibernate-validator提供了一个校验分组序列的概念。</p>
+<p>先定义好需要校验的分组顺序，@Validated注解中就只要标明校验哪个分组序列了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GroupSequence</span>(&#123;GroupB<span class="class">.<span class="keyword">class</span>, <span class="title">Default</span>.<span class="title">class</span>,  <span class="title">GroupA</span>.<span class="title">class</span>&#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">interface</span> <span class="title">GroupOrderSequence</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后参数前的@Validated注解就只要这样写了@Validated({GroupSequence.class})</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">zgq</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://yoursite.com/2019/10/29/SpringBoot%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%92%8C%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C/">http://yoursite.com/2019/10/29/SpringBoot%E7%BB%9F%E4%B8%80%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E5%92%8C%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://yoursite.com" target="_blank">zgq's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/post.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2019/11/04/Guava/"><img class="prev_cover lazyload" data-src="/img/post.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Guava</div></div></a></div><div class="next-post pull_right"><a href="/2019/10/28/%E5%BC%82%E6%AD%A5%E8%AF%B7%E6%B1%82%E5%92%8C%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8/"><img class="next_cover lazyload" data-src="/img/post.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">springboot中的异步请求、异步调用、定时任务</div></div></a></div></nav></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 By zgq</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="阅读模式"></i><i class="fa fa-plus" id="font_plus" title="放大字体"></i><i class="fa fa-minus" id="font_minus" title="缩小字体"></i><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="简繁转换" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="夜间模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="设置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目录" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到顶部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>
